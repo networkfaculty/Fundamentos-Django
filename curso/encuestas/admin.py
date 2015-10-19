@@ -21,6 +21,9 @@ class PreguntaAdmin(admin.ModelAdmin):
         ),
     ]
     inlines = [OpcionInline]
+    list_display = [ 'texto_pregunta', 'fe_publicacion', 'publicada_recientemente' ]
+    list_filter = [ 'fe_publicacion' ]
+    search_fields = ['texto_pregunta']
 
 admin.site.register(Pregunta, PreguntaAdmin)
 #admin.site.register(Opcion)
