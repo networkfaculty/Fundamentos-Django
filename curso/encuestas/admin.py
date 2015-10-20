@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import Pregunta, Opcion
 from django.forms import Textarea
 from django.db import models
+from django.contrib.admin import AdminSite
 
 class OpcionInline(admin.TabularInline):
     model = Opcion
@@ -25,5 +26,9 @@ class PreguntaAdmin(admin.ModelAdmin):
     list_filter = [ 'fe_publicacion' ]
     search_fields = ['texto_pregunta']
 
-admin.site.register(Pregunta, PreguntaAdmin)
-#admin.site.register(Opcion)
+class SitioAdministrativo(AdminSite):
+    site_header = 'Sitio Administrativo Personalizado'
+
+admin_site = SitioAdministrativo(name='curso-admin')
+
+admin_site.register(Pregunta, PreguntaAdmin)
