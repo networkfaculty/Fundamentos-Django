@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^curso-admin/', include(admin_site.urls)),
     #url(r'^grappelli/', include('grappelli.urls')), # para tema grapelli
+    url(r'^encuestas/', include('encuestas.urls')),
 ]

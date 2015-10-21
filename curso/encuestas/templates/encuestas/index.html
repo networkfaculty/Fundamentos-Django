@@ -1,0 +1,9 @@
+{% if preguntas_recientes %}
+    <ul>
+    {% for pregunta in preguntas_recientes %}
+        <li><a href="/encuestas/{{ pregunta.id }}/">{{ pregunta.texto_pregunta }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay encuestas disponibles.</p>
+{% endif %} 
