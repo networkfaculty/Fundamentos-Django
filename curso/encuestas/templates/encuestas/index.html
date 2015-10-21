@@ -1,9 +1,21 @@
 {% if preguntas_recientes %}
     <ul>
     {% for pregunta in preguntas_recientes %}
-        <li><a href="/encuestas/{{ pregunta.id }}/">{{ pregunta.texto_pregunta }}</a></li>
+        <li>
+            <a href="{% url 'encuestas:detalle' pregunta.id %}">
+            {{ pregunta.texto_pregunta }}
+            </a>
+            |
+            <a href="{% url 'encuestas:votar' pregunta.id %}">
+            Votar
+            </a>
+            |
+            <a href="{% url 'encuestas:resultados' pregunta.id %}">
+            Ver resultados
+            </a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No hay encuestas disponibles.</p>
-{% endif %} 
+{% endif %}
