@@ -7,7 +7,8 @@ from django.http import Http404
 
 def index(request):
     preguntas_recientes = Pregunta.objects.order_by('-fe_publicacion')[:5]
-    context = { 'preguntas_recientes': preguntas_recientes }
+    context = {'preguntas_recientes': preguntas_recientes,
+               'titulo': 'Listado de Encuestas' }
     return render(request, 'encuestas/index.html', context)
 
 #def detalle(request, id_pregunta):

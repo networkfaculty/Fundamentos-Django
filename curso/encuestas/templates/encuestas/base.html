@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>{{ titulo | default:"Encuestas" }}</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <header>{% block encabezado %}<h1>Encuestas</h1>{% endblock %}</header>
+    <nav>
+        {% block navegacion %}
+        <ul>
+            <li><a href="{% url 'encuestas:index' %}">Inicio</a></li>
+            {% block navegacion-elementos %}{% endblock %}
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+        {% endblock %}
+    </nav>
+    <section id="contenido">
+        {% block contenido %}{% endblock %}
+    </section>
+    <section id="contacto">
+        <h2>Contacto:</h2>
+        {% include 'encuestas/direccion.html' %}
+    </section>
+    <footer>Pie de página</footer>
+  </body>
+</html>

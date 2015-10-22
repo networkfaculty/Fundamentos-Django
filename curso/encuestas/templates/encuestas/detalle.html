@@ -1,6 +1,20 @@
-<h1>{{ pregunta.texto_pregunta }}</h1>
+{% extends 'encuestas/base.html' %}
+
+{% block encabezado %}
+<h1>Detalle de Encuesta: {{ pregunta.texto_pregunta|truncatewords:5|escape }}...</h1>
+{% endblock encabezado %}
+
+{% block contenido %}
+<h2>{{ pregunta.texto_pregunta|escape }}</h2>
 <ul>
 {% for opcion in pregunta.opcion_set.all %}
     <li>{{ opcion.texto_opcion }}</li>
 {% endfor %}
 </ul>
+<div id="acciones">
+    <a href="{% url 'encuestas:resultados' pregunta.id %}">
+    Ver resultados
+    </a>
+</div>
+
+{% endblock contenido %}
