@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from encuestas.admin import admin_site
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^curso-admin/', include(admin_site.urls)),
     #url(r'^grappelli/', include('grappelli.urls')), # para tema grapelli
     url(r'^encuestas/', include('encuestas.urls', namespace='encuestas')),
+    # Hacemos que la página predeterminada del proyecto sea el listado de encuestas
+    url(r'^$', RedirectView.as_view(url='encuestas'), name='index'),
 ]

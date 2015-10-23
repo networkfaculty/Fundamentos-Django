@@ -8,19 +8,28 @@
 
 {% if mensaje_error %}<p><strong>{{ mensaje_error }}</strong></p>{% endif %}
 
-<h2>{{ pregunta.texto_pregunta|escape }}</h2>
+<div class="panel panel-primary">
+    <div class="panel-heading">¡Participe!</div>
+    <div class="panel-body">
+        <h2>{{ pregunta.texto_pregunta|escape }}</h2>
 
-<form action="{% url 'encuestas:votar' pregunta.id %}" method="post">
-    {% csrf_token %}
-    {% for opcion in pregunta.opcion_set.all %}
-        <input type="radio" name="opcion" id="opcion{{ forloop.counter }}" value="{{ opcion.id }}">
-        <label for="opcion{{ forloop.counter }}">{{ opcion.texto_opcion }}</label><br>
-    {% endfor %}
-    <button type="submit">Votar</button>
-</form>
-
-<a href="{% url 'encuestas:resultados' pregunta.id %}">
-    Ver resultados
-</a>
+        <form action="{% url 'encuestas:votar' pregunta.id %}" method="post">
+            {% csrf_token %}
+            {% for opcion in pregunta.opcion_set.all %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="opcion" id="opcion{{ forloop.counter }}"
+                               value="{{ opcion.id }}">
+                        {{ opcion.texto_opcion }}
+                    </label>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Votar</button>
+            <a class="btn btn-info" href="{% url 'encuestas:resultados' pregunta.id %}">
+                Ver resultados
+            </a>
+        </form>
+    </div>
+</div>
 
 {% endblock contenido %}

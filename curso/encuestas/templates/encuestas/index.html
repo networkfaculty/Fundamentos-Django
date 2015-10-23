@@ -5,16 +5,16 @@
 
 {% if preguntas_recientes %}
     <h2>Encuestas recientes</h2>
-    <ul>
+    <ul class="list-group">
     {% for pregunta in preguntas_recientes %}
-        <li>
-            <a href="{% url 'encuestas:detalle' pregunta.id %}">
+        <li class="list-group-item clearfix">
             {{ pregunta.texto_pregunta }}
-            </a>
-            |
-            <a href="{% url 'encuestas:resultados' pregunta.id %}">
-            Ver resultados
-            </a>
+            <div class="btn-group pull-right" role="group" aria-label="Acciones">
+                <a class="btn btn-primary" role="button"
+                href="{% url 'encuestas:detalle' pregunta.id %}">Votar</a>
+                <a class="btn btn-info" role="button"
+                href="{% url 'encuestas:resultados' pregunta.id %}">Ver resultados</a>
+            </div>
         </li>
     {% endfor %}
     </ul>
