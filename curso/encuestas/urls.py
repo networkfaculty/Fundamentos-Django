@@ -7,7 +7,7 @@ urlpatterns = [
     # ej: /encuestas/5
     url(r'^(?P<id_pregunta>\d+)/$', views.detalle, name='detalle'),
     # ej: /encuestas/5/resultados
-    url(r'^(?P<id_pregunta>\d+)/resultados$', views.en_construccion, name='resultados'),
+    url(r'^(?P<id_pregunta>\d+)/resultados$', views.resultados, name='resultados'),
     # ej: /encuestas/5/votar
-    url(r'^(?P<id_pregunta>\d+)/votar$', views.en_construccion, name='votar'),
+    url(r'^(?P<id_pregunta>\d+)/votar$', views.votar, name='votar'),
 ]

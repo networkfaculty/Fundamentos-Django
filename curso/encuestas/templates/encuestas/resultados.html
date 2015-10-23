@@ -1,0 +1,21 @@
+{% extends 'encuestas/base.html' %}
+
+{% block encabezado %}
+<h1>Resultados de Encuesta: {{ pregunta.texto_pregunta|truncatewords:5|escape }}...</h1>
+{% endblock encabezado %}
+
+{% block contenido %}
+
+<h2>{{ pregunta.texto_pregunta|escape }}</h2>
+
+<ul>
+{% for opcion in pregunta.opcion_set.all %}
+    <li>{{ opcion.texto_opcion }} -- {{ opcion.votos }} voto(s)</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'encuestas:detalle' pregunta.id %}">
+    Votar
+</a>
+
+{% endblock contenido %}
