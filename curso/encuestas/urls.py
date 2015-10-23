@@ -3,11 +3,12 @@ from . import views
 
 urlpatterns = [
     # ej: /encuestas/
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.VistaIndex.as_view(), name='index'),
     # ej: /encuestas/5
-    url(r'^(?P<id_pregunta>\d+)/$', views.detalle, name='detalle'),
+    # Las vistas detalladas genéricas esperan que el argumento se llame 'pk'
+    url(r'^(?P<pk>\d+)/$', views.VistaDetalle.as_view(), name='detalle'),
     # ej: /encuestas/5/resultados
-    url(r'^(?P<id_pregunta>\d+)/resultados$', views.resultados, name='resultados'),
+    url(r'^(?P<pk>\d+)/resultados$', views.VistaResultados.as_view(), name='resultados'),
     # ej: /encuestas/5/votar
     url(r'^(?P<id_pregunta>\d+)/votar$', views.votar, name='votar'),
 ]

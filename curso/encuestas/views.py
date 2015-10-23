@@ -1,21 +1,32 @@
-from django.shortcuts import get_object_or_404, render
-
-from django.http import HttpResponse
-
 from .models import Pregunta, Opcion
-from django.http import Http404, HttpResponseRedirect
+
+from django.shortcuts import get_object_or_404, render
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.db.models import F
 from django.core.urlresolvers import reverse
+from django.views import generic
 
-def index(request):
-    preguntas_recientes = Pregunta.objects.order_by('-fe_publicacion')[:5]
-    context = {'preguntas_recientes': preguntas_recientes,
-               'titulo': 'Listado de Encuestas' }
-    return render(request, 'encuestas/index.html', context)
+#def index(request):
+    #preguntas_recientes = Pregunta.objects.order_by('-fe_publicacion')[:5]
+    #context = {'preguntas_recientes': preguntas_recientes,
+               #'titulo': 'Listado de Encuestas' }
+    #return render(request, 'encuestas/index.html', context)
 
-def detalle(request, id_pregunta):
-    pregunta = get_object_or_404( Pregunta, pk=id_pregunta )
-    return render(request, 'encuestas/detalle.html', {'pregunta': pregunta})
+class VistaIndex(generic.ListView):
+    template_name = 'encuestas/index.html'
+    context_object_name = 'preguntas_recientes'
+
+    def get_queryset(self):
+        return Pregunta.objects.order_by('-fe_publicacion')[:5]
+
+
+#def detalle(request, id_pregunta):
+    #pregunta = get_object_or_404( Pregunta, pk=id_pregunta )
+    #return render(request, 'encuestas/detalle.html', {'pregunta': pregunta})
+
+class VistaDetalle(generic.DetailView):
+    model = Pregunta
+    template_name = 'encuestas/detalle.html'
 
 def votar(request, id_pregunta):
     pregunta = get_object_or_404( Pregunta, pk=id_pregunta )
@@ -45,6 +56,10 @@ def votar(request, id_pregunta):
             'mensaje_error': "Opción faltante o inválida",
         })
 
-def resultados(request, id_pregunta):
-    pregunta = get_object_or_404( Pregunta, pk=id_pregunta )
-    return render(request, 'encuestas/resultados.html', {'pregunta': pregunta})
+#def resultados(request, id_pregunta):
+    #pregunta = get_object_or_404( Pregunta, pk=id_pregunta )
+    #return render(request, 'encuestas/resultados.html', {'pregunta': pregunta})
+
+class VistaResultados(generic.DetailView):
+    model = Pregunta
+    template_name = 'encuestas/resultados.html'
