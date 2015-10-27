@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/resultados$', views.VistaResultados.as_view(), name='resultados'),
     # ej: /encuestas/5/votar
     url(r'^(?P<id_pregunta>\d+)/votar$', views.votar, name='votar'),
+    url(r'^contacto$', views.contacto, name='contacto'),
 ]

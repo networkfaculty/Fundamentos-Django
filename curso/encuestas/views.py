@@ -8,6 +8,10 @@ from django.views import generic
 
 from django.contrib import messages
 
+from django.core.mail import send_mail
+from smtplib import SMTPException
+from .forms import FormContacto
+
 class VistaIndex(generic.ListView):
     template_name = 'encuestas/index.html'
     context_object_name = 'preguntas_recientes'
@@ -56,3 +60,31 @@ def votar(request, id_pregunta):
 class VistaResultados(generic.DetailView):
     model = Pregunta
     template_name = 'encuestas/resultados.html'
+
+def contacto(request):
+    if request.method == 'POST':
+        # Si ya se enviaron datos, se crea una instancia del formulario con ellos
+        form = FormContacto(request.POST)
+        # Y luego verificamos si es válido
+        if form.is_valid():
+            try:
+                asunto = form.cleaned_data['asunto']
+                mensaje = form.cleaned_data['mensaje']
+                remitente = form.cleaned_data['remitente']
+                cc_remitente = form.cleaned_data['cc_remitente']
+
+                destinatarios = ['homero@example.com']
+                if cc_remitente:
+                    destinatarios.append(remitente)
+
+                send_mail(asunto, mensaje, remitente, destinatarios)
+                messages.success(request, 'Mensaje enviado')
+                return HttpResponseRedirect( reverse('encuestas:index') )
+            except (ConnectionRefusedError, SMTPException):
+                messages.error(request, 'No se pudo enviar el mensaje')
+
+    # Si no se enviaron datos, mostramos el formulario vacío
+    else:
+        form = FormContacto()
+
+    return render(request, 'encuestas/contacto.html', {'form': form})

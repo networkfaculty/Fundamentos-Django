@@ -1,0 +1,19 @@
+{% extends 'encuestas/base.html' %}
+
+{% block contenido %}
+
+{% load bootstrap3 %}
+
+<h2>¡Déjanos tu mensaje!</h2>
+
+<form action="{% url 'encuestas:contacto' %}" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        {% bootstrap_icon "send" %} Enviar
+    </button>
+    {% endbuttons %}
+</form>
+
+{% endblock contenido %}
