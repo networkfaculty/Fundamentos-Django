@@ -12,4 +12,7 @@ urlpatterns = [
     # ej: /encuestas/5/votar
     url(r'^(?P<id_pregunta>\d+)/votar$', views.votar, name='votar'),
     url(r'^contacto$', views.contacto, name='contacto'),
+    url(r'^agregar$', views.VistaCrearPregunta.as_view(), name='agregar'),
+    url(r'^(?P<pk>\d+)/editar', views.VistaEditarPregunta.as_view(), name='editar'),
+    url(r'^(?P<pk>\d+)/opciones', views.VistaOpciones.as_view(), name='opciones'),
 ]

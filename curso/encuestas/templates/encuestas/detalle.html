@@ -1,4 +1,5 @@
 {% extends 'encuestas/base.html' %}
+{% load bootstrap3 %}
 
 {% block encabezado %}
 <h1>Detalle de Encuesta: {{ pregunta.texto_pregunta|truncatewords:5|escape }}...</h1>
@@ -25,6 +26,12 @@
             <button type="submit" class="btn btn-primary">Votar</button>
             <a class="btn btn-info" href="{% url 'encuestas:resultados' pregunta.id %}">
                 Ver resultados
+            </a>
+            <a class="btn btn-default" href="{% url 'encuestas:editar' pregunta.id %}">
+                {% bootstrap_icon "pencil" %} Editar Pregunta
+            </a>
+            <a class="btn btn-default" href="{% url 'encuestas:opciones' pregunta.id %}">
+                {% bootstrap_icon "pencil" %} Editar Opciones
             </a>
         </form>
     </div>

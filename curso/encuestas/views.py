@@ -3,14 +3,16 @@ from .models import Pregunta, Opcion
 from django.shortcuts import get_object_or_404, render
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.db.models import F
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views import generic
 
 from django.contrib import messages
 
 from django.core.mail import send_mail
 from smtplib import SMTPException
-from .forms import FormContacto
+from .forms import *
+
+from django.views.generic.edit import CreateView, UpdateView
 
 class VistaIndex(generic.ListView):
     template_name = 'encuestas/index.html'
@@ -88,3 +90,44 @@ def contacto(request):
         form = FormContacto()
 
     return render(request, 'encuestas/contacto.html', {'form': form})
+
+class VistaCrearPregunta(CreateView):
+    model = Pregunta
+    form_class = FormPregunta
+    template_name = 'encuestas/agregar_pregunta.html'
+    success_url = reverse_lazy('encuestas:index')
+
+class VistaEditarPregunta(UpdateView):
+    model = Pregunta
+    form_class = FormPregunta
+    template_name = 'encuestas/editar_pregunta.html'
+    success_url = reverse_lazy('encuestas:index')
+
+class VistaOpciones(UpdateView):
+    '''
+    En este ejemplo utilizamos un Formset personalizado para editar las opciones
+    correspondientes a una pregunta. Por ello, utilizamos el modelo "padre" (Pregunta),
+    y personalizamos los métodos get/post para obtener y guardar la lista de opciones
+    '''
+    model = Pregunta
+    form_class = FormPregunta
+    template_name = 'encuestas/editar_opciones.html'
+    success_url = reverse_lazy('encuestas:index')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        opciones_form = FormPreguntaOpciones(instance=self.object)
+        return self.render_to_response(
+            self.get_context_data(opciones_form=opciones_form,))
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        opciones_form = FormPreguntaOpciones(request.POST, instance=self.object)
+        if opciones_form.is_valid():
+            opciones_form.save()
+            messages.success(request, 'Opciones guardadas')
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            messages.error(request, 'No se pudieron guardar las opciones')
+            return self.render_to_response(
+                self.get_context_data(opciones_form=opciones_form,))

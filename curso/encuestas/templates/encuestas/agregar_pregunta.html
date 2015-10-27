@@ -1,0 +1,23 @@
+{% extends 'encuestas/base.html' %}
+
+{% block extra-head %}
+    {{ form.media }}
+{% endblock%}
+
+{% block contenido %}
+
+{% load bootstrap3 %}
+
+<h2>Agrega una nueva pregunta</h2>
+
+<form action="{% url 'encuestas:agregar' %}" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        {% bootstrap_icon "floppy-disk" %} Agregar Pregunta
+    </button>
+    {% endbuttons %}
+</form>
+
+{% endblock contenido %}

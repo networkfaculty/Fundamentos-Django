@@ -1,0 +1,22 @@
+{% extends 'encuestas/base.html' %}
+{% load bootstrap3 %}
+
+{% block contenido %}
+
+<h2>Editar Opciones para pregunta #{{ pregunta.id }}</h2>
+
+<h4>{{ pregunta.texto_pregunta }}</h4>
+
+<form action="{% url 'encuestas:opciones' pregunta.id %}" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_formset opciones_form %}
+
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        {% bootstrap_icon "floppy-disk" %} Guardar Cambios
+    </button>
+    {% endbuttons %}
+</form>
+
+{% endblock contenido %}

@@ -1,4 +1,5 @@
 {% extends 'encuestas/base.html' %}
+{% load bootstrap3 %}
 
 {% block contenido %}
 {% autoescape on %}
@@ -14,6 +15,9 @@
                 href="{% url 'encuestas:detalle' pregunta.id %}">Votar</a>
                 <a class="btn btn-info" role="button"
                 href="{% url 'encuestas:resultados' pregunta.id %}">Ver resultados</a>
+                <a class="btn btn-default" role="button"
+                href="{% url 'encuestas:editar' pregunta.id %}">
+                    {% bootstrap_icon "pencil" %} Editar Pregunta</a>
             </div>
         </li>
     {% endfor %}
@@ -21,6 +25,9 @@
 {% else %}
     <p>No hay encuestas disponibles.</p>
 {% endif %}
+
+    <a class="btn btn-default" role="button"
+    href="{% url 'encuestas:agregar' %}">{% bootstrap_icon "plus" %} Nueva Encuesta</a>
 
 {% endautoescape %}
 {% endblock contenido %}
