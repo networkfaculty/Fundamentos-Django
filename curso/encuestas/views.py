@@ -6,6 +6,8 @@ from django.db.models import F
 from django.core.urlresolvers import reverse
 from django.views import generic
 
+from django.contrib import messages
+
 class VistaIndex(generic.ListView):
     template_name = 'encuestas/index.html'
     context_object_name = 'preguntas_recientes'
@@ -41,13 +43,14 @@ def votar(request, id_pregunta):
         # Luego de guardar exitosamente, redireccionamos a página de resultados.
         # Utilizamos 'reverse' para obtener de manera reutilizable la URL de la vista a
         # la que queremos redirigir al usuario.
+        messages.success(request, "Voto registrado. ¡Gracias por participar!")
         return HttpResponseRedirect(reverse('encuestas:resultados',
                                             kwargs={'pk': pregunta.id}))
     except (KeyError, Opcion.DoesNotExist):
         # En caso de un código incorrecto o faltante de opción, volver a mostrar el formulario
+        messages.error(request, "Opción faltante o inválida")
         return render(request, 'encuestas/detalle.html', {
             'pregunta': pregunta,
-            'mensaje_error': "Opción faltante o inválida",
         })
 
 class VistaResultados(generic.DetailView):

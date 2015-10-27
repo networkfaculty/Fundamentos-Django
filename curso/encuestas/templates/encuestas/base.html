@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load bootstrap3 %}
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -60,6 +61,8 @@
         </div>
 
         <section id="contenido">
+            {% bootstrap_messages %}
+
             {% block contenido %}{% endblock %}
         </section>
         <section id="contacto" class="modal fade">
