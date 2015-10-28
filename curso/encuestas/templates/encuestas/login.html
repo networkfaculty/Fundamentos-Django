@@ -1,0 +1,31 @@
+{% extends 'encuestas/base.html' %}
+{% load bootstrap3 %}
+
+{% block contenido %}
+
+{% if form.errors %}
+    {% bootstrap_alert 'Las credenciales son inválidas' alert_type='danger' %}
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+        {% bootstrap_alert 'No posee privilegios para acceder a esta funcionalidad' alert_type='danger' %}
+    {% else %}
+        {% bootstrap_alert 'Inicie sesión para acceder a esta funcionalidad' alert_type='warning' %}
+    {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+        {% bootstrap_alert 'Ya ha iniciado sesión' alert_type='info' %}
+{% else %}
+<h2>Iniciar sesión</h2>
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}"  class="form-inline">
+{% csrf_token %}
+{% bootstrap_field form.username layout='inline' %}
+{% bootstrap_field form.password layout='inline' %}
+{% bootstrap_button "Iniciar sesión" button_type="submit" button_class="btn-primary" %}
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endif %}
+
+{% endblock %}

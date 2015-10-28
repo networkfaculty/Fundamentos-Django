@@ -24,5 +24,10 @@ urlpatterns = [
     #url(r'^grappelli/', include('grappelli.urls')), # para tema grapelli
     url(r'^encuestas/', include('encuestas.urls', namespace='encuestas')),
     # Hacemos que la página predeterminada del proyecto sea el listado de encuestas
-    url(r'^$', RedirectView.as_view(url='encuestas:index', permanent=True), name='index'),
+    url(r'^$', RedirectView.as_view(url='/encuestas/', permanent=True), name='index'),
+    # Utilizamos las vistas predeterminadas para iniciar y cerrar sesión
+    url(r'^login/$',
+        'django.contrib.auth.views.login',
+        {'template_name': 'encuestas/login.html'}),
+    url(r'^logout/$', 'django.contrib.auth.views.logout',{'next_page': '/'}),
 ]

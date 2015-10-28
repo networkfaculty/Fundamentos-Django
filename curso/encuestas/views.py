@@ -13,6 +13,9 @@ from smtplib import SMTPException
 from .forms import *
 
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.decorators import login_required
+from braces.views import LoginRequiredMixin, GroupRequiredMixin
 
 class VistaIndex(generic.ListView):
     template_name = 'encuestas/index.html'
@@ -26,10 +29,13 @@ class VistaIndex(generic.ListView):
         context['titulo'] = 'Listado de Encuestas'
         return context
 
-class VistaDetalle(generic.DetailView):
+# Agregamos LoginRequiredMixin para indicar que esta vista requiere autenticación
+class VistaDetalle(LoginRequiredMixin, generic.DetailView):
     model = Pregunta
     template_name = 'encuestas/detalle.html'
 
+# En el caso de una vista sencilla (método), podemos usar directamente el decorador login_required
+@login_required
 def votar(request, id_pregunta):
     pregunta = get_object_or_404( Pregunta, pk=id_pregunta )
     try:
@@ -40,7 +46,7 @@ def votar(request, id_pregunta):
         # Incrementamos la cantidad de votos para la opción seleccionada, pero desde la
         # base de datos directamente
         # opcion_seleccionada.votos += 1 # Esto puede generar problemas en transacciones
-                                         # concurrentes
+                                        # concurrentes
         opcion_seleccionada.votos = F('votos') + 1
         opcion_seleccionada.save()
         # Nota: Lo anterior también podría escribirse de forma compacta como:
@@ -91,19 +97,23 @@ def contacto(request):
 
     return render(request, 'encuestas/contacto.html', {'form': form})
 
-class VistaCrearPregunta(CreateView):
+# Para las vistas de crear y editar preguntas y opciones, utilizaremos GroupRequiredMixin
+
+class VistaCrearPregunta(GroupRequiredMixin, CreateView):
     model = Pregunta
     form_class = FormPregunta
     template_name = 'encuestas/agregar_pregunta.html'
     success_url = reverse_lazy('encuestas:index')
+    group_required = 'puede_administrar_encuestas'
 
-class VistaEditarPregunta(UpdateView):
+class VistaEditarPregunta(GroupRequiredMixin, UpdateView):
     model = Pregunta
     form_class = FormPregunta
     template_name = 'encuestas/editar_pregunta.html'
     success_url = reverse_lazy('encuestas:index')
+    group_required = 'puede_administrar_encuestas'
 
-class VistaOpciones(UpdateView):
+class VistaOpciones(GroupRequiredMixin, UpdateView):
     '''
     En este ejemplo utilizamos un Formset personalizado para editar las opciones
     correspondientes a una pregunta. Por ello, utilizamos el modelo "padre" (Pregunta),
@@ -113,6 +123,7 @@ class VistaOpciones(UpdateView):
     form_class = FormPregunta
     template_name = 'encuestas/editar_opciones.html'
     success_url = reverse_lazy('encuestas:index')
+    group_required = 'puede_administrar_encuestas'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
